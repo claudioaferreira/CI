@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main  # Ejecuta las pruebas cuando se haga push en la rama main
+  pull_request:
+    branches:
+      - main  # Ejecuta las pruebas cuando se abra un pull request hacia la rama main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Ejecuta el trabajo en un entorno Ubuntu
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]  # Prueba en múltiples versiones de Node.js
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  # Clona el repositorio
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}  # Configura la versión de Node.js
+
+    - name: Install dependencies
+      run: npm install  # Instala las dependencias
+
+    - name: Run tests
+      run: npm test  # Ejecuta las pruebas definidas en tu package.json
